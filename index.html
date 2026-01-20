@@ -3,321 +3,247 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-    <title>HRMS Calc</title>
-    
-    <!-- PWA / App 配置 -->
-    <meta name="apple-mobile-web-app-capable" content="yes">
-    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-    <meta name="format-detection" content="telephone=no">
     <meta name="theme-color" content="#FDF6F6">
-
-    <!-- 内嵌 App 图标 (SVG 转 Base64) -->
-    <link rel="apple-touch-icon" href="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA1MTIgNTEyIiBzdHlsZT0iYmFja2dyb3VuZC1jb2xvcjojQzY3Q0VFO2JvcmRlci1yYWRpdXM6MjAlIj48cGF0aCBkPSJNMjU2IDQ4Yy04LjggMC0xNiA3LjItMTYgMTZ2MzIuMWMtMjkuMiA2LjItNTIuOCAyOC44LTU4LjcgNTguN0wxMzkuNyAzMzkuNGMtOC44IDMxLjEgMTQuNiA2Mi45IDQ2LjggNjIuOWgxMzkuMWMzMi4yIDAgNTUuNi0zMS44IDQ2LjgtNjIuOUwzMzAuNyAxNTQuOGMtNS45LTI5LjktMjkuNS01Mi41LTU4LjctNTguN1Y2NGMwLTguOC03LjItMTYtMTYtMTZ6bTAgODBhMjQgMjQgMCAxIDEgMCA0OCAyNCAyNCAwIDEgMSAwLTQ4em0tNDggMTQ0YTI0IDI0IDAgMSAxIDAgNDggMjQgMjQgMCAxIDEgMC00OHptOTYgMGEyNCAyNCAwIDEgMSAwIDQ4IDI0IDI0IDAgMSAxIDAgLTQ4eiIgZmlsbD0iI2ZmZiIvPjwvc3ZnPg==">
-    <link rel="icon" type="image/png" href="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA1MTIgNTEyIiBzdHlsZT0iYmFja2dyb3VuZC1jb2xvcjojQzY3Q0VFO2JvcmRlci1yYWRpdXM6MjAlIj48cGF0aCBkPSJNMjU2IDQ4Yy04LjggMC0xNiA3LjItMTYgMTZ2MzIuMWMtMjkuMiA2LjItNTIuOCAyOC44LTU4LjcgNTguN0wxMzkuNyAzMzkuNGMtOC44IDMxLjEgMTQuNiA2Mi45IDQ2LjggNjIuOWgxMzkuMWMzMi4yIDAgNTUuNi0zMS44IDQ2LjgtNjIuOUwzMzAuNyAxNTQuOGMtNS45LTI5LjktMjkuNS01Mi41LTU4LjctNTguN1Y2NGMwLTguOC03LjItMTYtMTYtMTZ6bTAgODBhMjQgMjQgMCAxIDEgMCA0OCAyNCAyNCAwIDEgMSAwLTQ4em0tNDggMTQ0YTI0IDI0IDAgMSAxIDAgNDggMjQgMjQgMCAxIDEgMC00OHptOTYgMGEyNCAyNCAwIDEgMSAwIDQ4IDI0IDI0IDAgMSAxIDAgLTQ4eiIgZmlsbD0iI2ZmZiIvPjwvc3ZnPg==">
-
-    <!-- Web App Manifest -->
-    <link rel="manifest" href="./manifest.json">
-
+    <title>HRMS 计算器 (移动版)</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
-        /* 马卡龙配色定义 */
+        /* --- 配色方案 (保持原版马卡龙色系) --- */
         :root {
             --macaron-pink: #FFB7B2;
-            --macaron-pink-deep: #FF8A80;
             --macaron-purple: #C7CEEA;
             --macaron-purple-strong: #9fa8da;
-            --macaron-green: #B5EAD7;
-            --macaron-yellow: #FFFFD1;
-            --macaron-peach: #FFDAC1;
             --bg-color: #FDF6F6;
-            --text-gray: #718096;
-            /* 处理 iPhone X+ 底部安全区域 */
-            --safe-area-bottom: env(safe-area-inset-bottom);
         }
 
         body {
             background-color: var(--bg-color);
             font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
-            color: #555;
+            color: #4A5568;
             -webkit-tap-highlight-color: transparent;
-            /* 禁用选择，更像App */
-            user-select: none;
-            -webkit-user-select: none;
-        }
-        
-        /* 允许输入框被选择 */
-        input, textarea, .selectable {
-            user-select: text;
-            -webkit-user-select: text;
         }
 
+        /* 移动端全屏，桌面端卡片 */
         .app-container {
-            display: flex;
-            flex-direction: column;
-            min-height: 100vh;
-            padding: 20px;
-            padding-bottom: calc(20px + var(--safe-area-bottom));
-            max-width: 600px;
-            margin: 0 auto;
+            background: rgba(255, 255, 255, 0.98);
+            transition: all 0.3s ease;
         }
 
-        .card {
-            background: rgba(255, 255, 255, 0.95);
-            backdrop-filter: blur(10px);
-            border-radius: 24px;
-            box-shadow: 0 8px 30px rgba(199, 206, 234, 0.3);
-            border: 2px solid #fff;
-            padding: 24px;
-            margin-bottom: 20px;
+        /* 桌面端样式覆盖 */
+        @media (min-width: 768px) {
+            body {
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                min-height: 100vh;
+                padding: 2rem;
+            }
+            .app-container {
+                border-radius: 24px;
+                box-shadow: 0 20px 40px rgba(199, 206, 234, 0.4);
+                max-width: 680px;
+                width: 100%;
+                border: 2px solid #fff;
+                min-height: auto;
+            }
         }
 
+        /* 输入框优化 */
         .macaron-input {
             border: 2px solid var(--macaron-purple);
             border-radius: 16px;
             padding: 14px;
+            padding-right: 40px; /* 为清除按钮留位 */
             transition: all 0.3s ease;
             width: 100%;
             outline: none;
             color: #4A5568;
             background-color: #FAFAFA;
-            font-size: 18px; /* 必须大于16px防止缩放 */
-            font-family: 'Courier New', Courier, monospace; /* 适合化学式 */
-            letter-spacing: 1px;
+            /* iOS防止缩放的关键设置 */
+            font-size: 18px !important; 
         }
 
         .macaron-input:focus {
             border-color: var(--macaron-pink);
             background-color: #FFF;
-            box-shadow: 0 0 0 3px rgba(255, 183, 178, 0.2);
+            box-shadow: 0 0 0 4px rgba(255, 183, 178, 0.15);
         }
 
-        /* 触摸按钮优化 */
-        .btn-touch {
-            min-height: 56px;
-            border-radius: 18px;
-            font-weight: 600;
-            transition: transform 0.1s cubic-bezier(0.4, 0, 0.2, 1);
-            position: relative;
+        /* 清除按钮 */
+        .clear-btn {
+            position: absolute;
+            right: 12px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #CBD5E0;
+            cursor: pointer;
+            padding: 8px;
+            display: none;
+        }
+        .macaron-input:not(:placeholder-shown) + .clear-btn {
+            display: block;
         }
 
-        .btn-touch:active {
-            transform: scale(0.96);
-        }
-
+        /* 模式按钮 */
         .mode-btn {
             background-color: #FFFFFF;
-            border: 2px solid #E2E8F0;
-            color: var(--text-gray);
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
+            border: 1px solid #E2E8F0;
+            color: #718096;
+            padding: 14px;
+            border-radius: 16px;
+            font-weight: 600;
+            position: relative;
+            touch-action: manipulation; /* 优化点击响应 */
         }
         
         .mode-btn.active {
             background: var(--macaron-purple-strong);
             border-color: var(--macaron-purple-strong);
             color: white;
-            box-shadow: 0 4px 15px rgba(159, 168, 218, 0.4);
+            box-shadow: 0 8px 20px rgba(159, 168, 218, 0.4);
+            transform: translateY(-1px);
         }
 
-        #btnPos.active { background: #9fa8da; border-color: #9fa8da; }
-        #btnNeg.active { background: #ffab91; border-color: #ffab91; box-shadow: 0 4px 15px rgba(255, 171, 145, 0.4); }
-
-        .calc-btn {
-            background: linear-gradient(135deg, var(--macaron-pink-deep), #FFAB91);
-            color: white;
-            border: none;
-            box-shadow: 0 8px 20px rgba(255, 138, 128, 0.25);
-            font-size: 1.2rem;
+        #btnNeg.active { 
+            background: #FFAB91; 
+            border-color: #FFAB91; 
+            box-shadow: 0 8px 20px rgba(255, 171, 145, 0.4); 
         }
 
-        /* 结果区域 */
-        .result-wrapper {
-            background: white;
-            border-radius: 18px;
-            border: 1px solid #eee;
-            overflow: hidden;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.03);
-        }
-
-        .result-table {
-            width: 100%;
-            border-collapse: collapse;
-        }
-
+        /* 表格优化 */
         .result-table th {
-            background-color: var(--macaron-purple);
-            color: white;
-            padding: 14px;
-            font-size: 0.85rem;
-            text-align: left;
+            background-color: #F7FAFC;
+            color: #718096;
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            padding: 10px 8px;
+            border-bottom: 2px solid #EDF2F7;
         }
         
         .result-table td {
-            padding: 14px;
-            border-bottom: 1px solid #f7f7f7;
+            padding: 12px 8px;
+            border-bottom: 1px solid #F7FAFC;
             font-size: 0.95rem;
         }
 
-        /* 安装提示 Modal */
-        .install-modal {
-            position: fixed;
-            bottom: 0;
-            left: 0;
-            right: 0;
-            background: white;
-            border-top-left-radius: 20px;
-            border-top-right-radius: 20px;
-            padding: 25px;
-            box-shadow: 0 -5px 40px rgba(0,0,0,0.15);
-            transform: translateY(110%);
-            transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
-            z-index: 100;
-        }
-        .install-modal.show {
-            transform: translateY(0);
+        /* 紧凑模式：小屏幕隐藏加合名称，只显示公式 */
+        @media (max-width: 360px) {
+            .col-name { display: none; }
         }
 
-        .install-icon {
-            display: inline-block;
-            width: 20px;
-            height: 20px;
+        .badge {
+            padding: 2px 6px;
+            border-radius: 6px;
+            font-size: 0.75rem;
+            margin-right: 4px;
+            font-weight: bold;
             vertical-align: middle;
-            margin: 0 4px;
         }
-        
-        /* 徽章 */
-        .badge { display: inline-flex; padding: 2px 6px; border-radius: 6px; font-size: 0.7rem; font-weight: bold; margin-right: 5px; vertical-align: middle; }
-        .badge-pos { background-color: var(--macaron-peach); color: white; }
-        .badge-neg { background-color: var(--macaron-purple); color: white; }
+        .badge-pos { background-color: #FFDAC1; color: #D97706; }
+        .badge-neg { background-color: #C7CEEA; color: #4C51BF; }
 
         /* 动画 */
-        @keyframes fadeUp {
-            from { opacity: 0; transform: translateY(10px); }
+        @keyframes slideUp {
+            from { opacity: 0; transform: translateY(15px); }
             to { opacity: 1; transform: translateY(0); }
         }
-        .fade-up { animation: fadeUp 0.4s ease-out forwards; }
+        .animate-slide-up {
+            animation: slideUp 0.4s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+        }
 
+        /* 安全区适配 (iPhone X+) */
+        .safe-pb {
+            padding-bottom: env(safe-area-inset-bottom);
+        }
     </style>
 </head>
-<body>
+<body class="safe-pb">
 
-    <div class="app-container">
-        <!-- 顶部 Header -->
-        <div class="flex justify-between items-center mb-6 mt-2">
-            <div>
-                <h1 class="text-2xl font-bold tracking-tight" style="color: #7986CB;">HRMS Calc</h1>
-                <p class="text-xs text-gray-400">High-Res Mass Spectrometry</p>
-            </div>
-            <!-- 安装帮助按钮 -->
-            <button onclick="showInstallHelp()" class="bg-white p-2 rounded-full shadow-sm border border-gray-100 text-gray-400">
-                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
-                </svg>
-            </button>
+    <div class="app-container min-h-screen md:min-h-0 flex flex-col p-5">
+        <div class="mb-6 mt-2 md:mt-0 text-center">
+            <h1 class="text-2xl font-bold text-gray-700 tracking-tight">HRMS 计算器</h1>
+            <p class="text-xs text-gray-400 mt-1 uppercase tracking-widest">High Resolution Mass Spec</p>
         </div>
 
-        <div class="card fade-up">
-            <!-- 1. 分子式 -->
-            <div class="mb-5">
-                <label class="block text-gray-500 text-xs font-bold mb-2 ml-1 uppercase tracking-wider">Formula</label>
-                <div class="relative">
-                    <input type="text" id="formulaInput" placeholder="C6H12O6" 
-                           class="macaron-input" 
-                           autocapitalize="characters"
-                           autocomplete="off"
-                           spellcheck="false"
-                           enterkeyhint="go"
-                           onkeypress="handleEnter(event)">
-                    <!-- 清除按钮 -->
-                    <button onclick="clearInput()" id="clearBtn" class="absolute right-3 top-3 text-gray-300 hidden">
-                        <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clip-rule="evenodd"/></svg>
-                    </button>
-                </div>
-                <p id="formulaError" class="text-red-400 text-xs mt-2 hidden ml-1 font-bold">无效的分子式</p>
-            </div>
-
-            <!-- 2. 模式与精度 -->
-            <div class="grid grid-cols-2 gap-3 mb-6">
-                <!-- 模式 -->
-                <div class="col-span-2">
-                    <label class="block text-gray-500 text-xs font-bold mb-2 ml-1 uppercase tracking-wider">Mode</label>
-                    <div class="flex gap-3">
-                        <button class="mode-btn btn-touch active flex-1" onclick="setMode('pos')" id="btnPos">
-                            <span class="text-lg">POS +</span>
-                        </button>
-                        <button class="mode-btn btn-touch flex-1" onclick="setMode('neg')" id="btnNeg">
-                            <span class="text-lg">NEG -</span>
-                        </button>
-                    </div>
+        <div class="mb-6 flex-none">
+            <div class="flex justify-between items-center mb-2 px-1">
+                <label class="text-sm font-bold text-gray-600">分子式</label>
+                <div class="flex items-center bg-gray-100 rounded-lg px-2 py-1">
+                    <span class="text-xs text-gray-400 mr-2">小数位</span>
+                    <select id="decimalSelect" class="text-sm bg-transparent font-medium text-gray-600 outline-none" onchange="if(document.getElementById('resultContainer').style.opacity === '1') calculate()">
+                        <option value="4">4</option>
+                        <option value="5" selected>5</option>
+                        <option value="6">6</option>
+                    </select>
                 </div>
             </div>
-
-            <div class="mb-6">
-                <label class="block text-gray-500 text-xs font-bold mb-2 ml-1 uppercase tracking-wider">Precision</label>
-                <select id="decimalSelect" class="macaron-input bg-white h-12 py-2 text-base">
-                    <option value="4">4 Decimals</option>
-                    <option value="5" selected>5 Decimals</option>
-                    <option value="6">6 Decimals</option>
-                </select>
+            
+            <div class="relative group">
+                <input type="text" id="formulaInput" 
+                       placeholder="如: C6H12O6" 
+                       class="macaron-input font-mono uppercase tracking-wider" 
+                       enterkeyhint="search"
+                       onkeydown="handleKey(event)"
+                       autocomplete="off">
+                <div class="clear-btn" onclick="clearInput()">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+                        <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clip-rule="evenodd" />
+                    </svg>
+                </div>
             </div>
-
-            <!-- 计算按钮 -->
-            <button onclick="calculate()" class="calc-btn btn-touch w-full flex items-center justify-center gap-2">
-                Calculate
-            </button>
+            <p id="formulaError" class="hidden text-red-500 text-xs mt-2 px-1 font-medium flex items-center">
+                <svg class="w-3 h-3 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                格式错误 (示例: C23H30N4O5)
+            </p>
         </div>
 
-        <!-- 结果区域 -->
-        <div id="resultContainer" class="hidden pb-10">
-            <div class="flex justify-between items-end mb-3 px-2">
+        <div class="mb-6 flex-none">
+            <div class="grid grid-cols-2 gap-4">
+                <button class="mode-btn active flex flex-col items-center justify-center gap-1" onclick="setMode('pos')" id="btnPos">
+                    <span class="text-base font-bold">POS (+)</span>
+                    <span class="text-[10px] opacity-60 font-normal">正离子模式</span>
+                </button>
+                <button class="mode-btn flex flex-col items-center justify-center gap-1" onclick="setMode('neg')" id="btnNeg">
+                    <span class="text-base font-bold">NEG (-)</span>
+                    <span class="text-[10px] opacity-60 font-normal">负离子模式</span>
+                </button>
+            </div>
+        </div>
+
+        <div id="resultContainer" class="hidden flex-1 overflow-hidden flex flex-col">
+            <div class="flex justify-between items-end mb-3 px-1 flex-none">
                 <div>
-                    <span class="text-gray-400 text-xs uppercase font-bold tracking-wider">Neutral Mass</span>
-                    <div class="text-2xl font-bold text-gray-700 font-mono selectable" id="neutralMassDisplay">--</div>
+                    <span class="text-gray-400 text-[10px] uppercase font-bold tracking-wider">Neutral Mass</span>
+                    <div class="text-2xl font-bold text-gray-700 font-mono leading-none mt-1" id="neutralMassDisplay">--</div>
                 </div>
-                <button onclick="copyResults()" class="bg-blue-50 text-blue-500 px-4 py-2 rounded-full text-xs font-bold active:bg-blue-100 transition-colors">
-                    Copy All
+                <button onclick="copyResults()" class="active:bg-gray-100 p-2 -mr-2 rounded-lg text-xs text-blue-500 font-medium transition-colors flex items-center">
+                    <svg class="w-3 h-3 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 5H6a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2v-1M8 5a2 2 0 002 2h2a2 2 0 002-2M8 5a2 2 0 012-2h2a2 2 0 012 2m0 0h2a2 2 0 012 2v3m2 4H10m0 0l3-3m-3 3l3 3"></path></svg>
+                    复制
                 </button>
             </div>
 
-            <div class="result-wrapper">
-                <table class="result-table">
-                    <thead>
+            <div class="overflow-y-auto flex-1 rounded-xl border border-gray-100 bg-white shadow-sm scroll-smooth" style="max-height: 40vh;">
+                <table class="w-full text-left border-collapse">
+                    <thead class="sticky top-0 bg-gray-50 z-10 shadow-sm">
                         <tr>
-                            <th width="45%">Adduct</th>
-                            <th width="55%" class="text-right pr-4">m/z</th>
+                            <th width="35%">离子</th>
+                            <th width="30%" class="col-name">类型</th>
+                            <th width="35%" class="text-right pr-4">m/z</th>
                         </tr>
                     </thead>
-                    <tbody id="resultBody" class="text-gray-600">
-                        <!-- JS Filling -->
-                    </tbody>
+                    <tbody id="resultBody" class="text-gray-600 divide-y divide-gray-50">
+                        </tbody>
                 </table>
             </div>
         </div>
-    </div>
-
-    <!-- 安装指引 Modal -->
-    <div id="installModal" class="install-modal">
-        <div class="flex justify-between items-center mb-4">
-            <h3 class="text-lg font-bold text-gray-700">如何安装成 App?</h3>
-            <button onclick="closeInstallHelp()" class="text-gray-400 p-2">✕</button>
-        </div>
         
-        <div id="iosHelp" class="hidden">
-            <p class="text-sm text-gray-600 mb-2">在 Safari 浏览器底部点击分享图标 <svg class="install-icon text-blue-500" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8.684 13.342C8.886 12.938 9 12.482 9 12c0-.482-.114-.938-.316-1.342m0 2.684a3 3 0 110-2.684m0 2.684l6.632 3.316m-6.632-6l6.632-3.316m0 0a3 3 0 105.367-2.684 3 3 0 00-5.367 2.684zm0 9.316a3 3 0 105.368 2.684 3 3 0 00-5.368-2.684z" /></svg></p>
-            <p class="text-sm text-gray-600">向下滑动并选择 <span class="font-bold text-gray-800">“添加到主屏幕”</span>。</p>
-        </div>
-
-        <div id="androidHelp" class="hidden">
-            <p class="text-sm text-gray-600 mb-2">在浏览器右上角点击菜单 <span class="font-bold text-gray-800">⋮</span></p>
-            <p class="text-sm text-gray-600">选择 <span class="font-bold text-gray-800">“添加到主屏幕”</span> 或 <span class="font-bold text-gray-800">“安装应用”</span>。</p>
+        <div class="mt-auto pt-4 text-center">
+             <p class="text-[10px] text-gray-300">Supported: H, C, N, O, F, Na, P, S, Cl, K, Br, I</p>
         </div>
     </div>
-    <div id="modalBackdrop" class="fixed inset-0 bg-black/20 hidden z-50" onclick="closeInstallHelp()"></div>
 
     <script>
-        // --- Core Data ---
+        // --- 核心数据 (保持不变) ---
         const ATOMIC_MASSES = {
             'H': 1.007825032, 'C': 12.000000000, 'N': 14.003074004, 'O': 15.994914619,
             'F': 18.998403163, 'Na': 22.989769282, 'P': 30.973761998, 'S': 31.972071174,
@@ -327,174 +253,34 @@
 
         const ADDUCTS_POS = [
             { label: "[M+H]+",     name: "Protonated",      calc: (m) => m + ATOMIC_MASSES.H - ELECTRON_MASS },
-            { label: "[M+NH4]+",   name: "Ammonium",        calc: (m) => m + ATOMIC_MASSES.N + (4 * ATOMIC_MASSES.H) - ELECTRON_MASS },
             { label: "[M+Na]+",    name: "Sodiated",        calc: (m) => m + ATOMIC_MASSES.Na - ELECTRON_MASS },
             { label: "[M+K]+",     name: "Potassiated",     calc: (m) => m + ATOMIC_MASSES.K - ELECTRON_MASS },
-            { label: "[M+2H]2+",   name: "Doubly H+",       calc: (m) => (m + 2 * ATOMIC_MASSES.H - 2 * ELECTRON_MASS) / 2 },
+            { label: "[M+NH4]+",   name: "Ammonium",        calc: (m) => m + ATOMIC_MASSES.N + (4 * ATOMIC_MASSES.H) - ELECTRON_MASS },
+            { label: "[M+2H]2+",   name: "Doubly Prot.",    calc: (m) => (m + 2 * ATOMIC_MASSES.H - 2 * ELECTRON_MASS) / 2 },
             { label: "[2M+H]+",    name: "Dimer + H",       calc: (m) => (2 * m) + ATOMIC_MASSES.H - ELECTRON_MASS },
             { label: "[2M+Na]+",   name: "Dimer + Na",      calc: (m) => (2 * m) + ATOMIC_MASSES.Na - ELECTRON_MASS },
-            { label: "[M+H-H2O]+", name: "- Water",         calc: (m) => m + ATOMIC_MASSES.H - (2*ATOMIC_MASSES.H + ATOMIC_MASSES.O) - ELECTRON_MASS },
+            { label: "[M+H-H2O]+", name: "Loss H2O",        calc: (m) => m + ATOMIC_MASSES.H - (2*ATOMIC_MASSES.H + ATOMIC_MASSES.O) - ELECTRON_MASS },
         ];
 
         const ADDUCTS_NEG = [
             { label: "[M-H]-",       name: "Deprotonated",    calc: (m) => m - ATOMIC_MASSES.H + ELECTRON_MASS },
             { label: "[M+Cl]-",      name: "Chloride",        calc: (m) => m + ATOMIC_MASSES.Cl + ELECTRON_MASS },
             { label: "[M+HCOO]-",    name: "Formate",         calc: (m) => m + ATOMIC_MASSES.H + ATOMIC_MASSES.C + (2 * ATOMIC_MASSES.O) + ELECTRON_MASS },
-            { label: "[M+CH3COO]-",  name: "Acetate",         calc: (m) => m + (2 * ATOMIC_MASSES.C) + (3 * ATOMIC_MASSES.H) + (2 * ATOMIC_MASSES.O) + ELECTRON_MASS },
+            { label: "[M+OAc]-",     name: "Acetate",         calc: (m) => m + (2 * ATOMIC_MASSES.C) + (3 * ATOMIC_MASSES.H) + (2 * ATOMIC_MASSES.O) + ELECTRON_MASS },
             { label: "[M+Br]-",      name: "Bromide",         calc: (m) => m + ATOMIC_MASSES.Br + ELECTRON_MASS },
             { label: "[2M-H]-",      name: "Dimer - H",       calc: (m) => (2 * m) - ATOMIC_MASSES.H + ELECTRON_MASS },
+            { label: "[M-2H]2-",     name: "Doubly Deprot.",  calc: (m) => (m - 2 * ATOMIC_MASSES.H + 2 * ELECTRON_MASS) / 2 },
             { label: "[M+TFA-H]-",   name: "TFA Adduct",      calc: (m) => m + (2*ATOMIC_MASSES.C + ATOMIC_MASSES.H + 3*ATOMIC_MASSES.F + 2*ATOMIC_MASSES.O) - ATOMIC_MASSES.H + ELECTRON_MASS }
         ];
 
         let currentMode = 'pos';
 
-        // --- Logic ---
-        const inputEl = document.getElementById('formulaInput');
-        const clearBtn = document.getElementById('clearBtn');
-
-        inputEl.addEventListener('input', function() {
-            clearBtn.classList.toggle('hidden', this.value === '');
-        });
-
-        function clearInput() {
-            inputEl.value = '';
-            inputEl.focus();
-            clearBtn.classList.add('hidden');
-            document.getElementById('resultContainer').classList.add('hidden');
-        }
+        // 页面加载完成后聚焦输入框 (可选，如果觉得键盘弹出烦人可注释掉)
+        // window.onload = () => document.getElementById('formulaInput').focus();
 
         function setMode(mode) {
             currentMode = mode;
-            const baseClass = "mode-btn btn-touch flex-1";
-            document.getElementById('btnPos').className = mode === 'pos' ? baseClass + ' active' : baseClass;
-            document.getElementById('btnNeg').className = mode === 'neg' ? baseClass + ' active' : baseClass;
+            document.getElementById('btnPos').className = `mode-btn flex flex-col items-center justify-center gap-1 ${mode === 'pos' ? 'active' : ''}`;
+            document.getElementById('btnNeg').className = `mode-btn flex flex-col items-center justify-center gap-1 ${mode === 'neg' ? 'active' : ''}`;
             
-            if(inputEl.value.trim()) calculate();
-        }
-
-        function handleEnter(e) {
-            if (e.key === 'Enter') {
-                inputEl.blur(); 
-                calculate();
-            }
-        }
-
-        function parseFormula(formula) {
-            const regex = /([A-Z][a-z]*)(\d*)/g;
-            let match;
-            const elements = {};
-            let validLength = 0;
-
-            while ((match = regex.exec(formula)) !== null) {
-                const element = match[1];
-                const count = match[2] === '' ? 1 : parseInt(match[2]);
-                if (!ATOMIC_MASSES[element]) throw new Error(`Unknown: ${element}`);
-                elements[element] = (elements[element] || 0) + count;
-                validLength += match[0].length;
-            }
-
-            if (validLength !== formula.length || validLength === 0) throw new Error("Invalid Format");
-            return elements;
-        }
-
-        function calculate() {
-            const input = inputEl.value.trim();
-            const errorEl = document.getElementById('formulaError');
-            const resultContainer = document.getElementById('resultContainer');
-            const resultBody = document.getElementById('resultBody');
-            const neutralMassDisplay = document.getElementById('neutralMassDisplay');
-            const precision = parseInt(document.getElementById('decimalSelect').value);
-
-            errorEl.classList.add('hidden');
-            resultContainer.classList.add('hidden');
-            resultBody.innerHTML = '';
-
-            try {
-                if (!input) throw new Error("Empty Formula");
-                
-                const elements = parseFormula(input);
-                let neutralMass = 0;
-                for (let el in elements) neutralMass += ATOMIC_MASSES[el] * elements[el];
-                
-                neutralMassDisplay.textContent = neutralMass.toFixed(precision);
-                const adductList = currentMode === 'pos' ? ADDUCTS_POS : ADDUCTS_NEG;
-                
-                adductList.forEach(adduct => {
-                    const mz = adduct.calc(neutralMass);
-                    const row = document.createElement('tr');
-                    const isCommon = (adduct.label === '[M+H]+' || adduct.label === '[M-H]-');
-                    
-                    row.innerHTML = `
-                        <td>
-                            <div class="flex flex-col">
-                                <span class="${isCommon ? 'text-gray-800 font-bold' : ''} text-base">
-                                    ${adduct.label}
-                                </span>
-                                <span class="text-xs text-gray-400">${adduct.name}</span>
-                            </div>
-                        </td>
-                        <td class="text-right font-mono text-lg pr-4 ${isCommon ? 'font-bold' : ''}" style="color:var(--macaron-purple-strong)">
-                            ${mz.toFixed(precision)}
-                        </td>
-                    `;
-                    resultBody.appendChild(row);
-                });
-
-                resultContainer.classList.remove('hidden');
-                resultContainer.classList.add('fade-up');
-                setTimeout(() => resultContainer.scrollIntoView({ behavior: 'smooth', block: 'nearest' }), 100);
-
-            } catch (err) {
-                errorEl.textContent = err.message;
-                errorEl.classList.remove('hidden');
-            }
-        }
-
-        function copyResults() {
-            let text = `F: ${inputEl.value} | Mass: ${document.getElementById('neutralMassDisplay').textContent}\n`;
-            const rows = document.getElementById('resultBody').querySelectorAll('tr');
-            rows.forEach(row => {
-                const label = row.querySelector('span').innerText.trim();
-                const mz = row.querySelector('.text-right').innerText.trim();
-                text += `${label}\t${mz}\n`;
-            });
-            navigator.clipboard.writeText(text).then(() => {
-                const btn = document.querySelector('button[onclick="copyResults()"]');
-                const originalText = btn.innerText;
-                btn.innerText = "Copied!";
-                setTimeout(() => btn.innerText = originalText, 1500);
-            });
-        }
-
-        // --- Install Help Logic ---
-        function showInstallHelp() {
-            const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;
-            if(isIOS) {
-                document.getElementById('iosHelp').classList.remove('hidden');
-            } else {
-                document.getElementById('androidHelp').classList.remove('hidden');
-            }
-            document.getElementById('installModal').classList.add('show');
-            document.getElementById('modalBackdrop').classList.remove('hidden');
-        }
-
-        function closeInstallHelp() {
-            document.getElementById('installModal').classList.remove('show');
-            document.getElementById('modalBackdrop').classList.add('hidden');
-        }
-
-        // Service Worker 注册
-        if ('serviceWorker' in navigator) {
-            window.addEventListener('load', () => {
-                navigator.serviceWorker.register('./service-worker.js')
-                    .then(registration => {
-                        console.log('SW registered: ', registration);
-                    })
-                    .catch(registrationError => {
-                        console.log('SW registration failed: ', registrationError);
-                    });
-            });
-        }
-    </script>
-</body>
-</html>
+            // 如果已有输入，切换模式直接重
